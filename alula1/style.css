@@ -1,0 +1,460 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&family=Poppins:wght@400;600&display=swap');
+
+/* ============================= */
+/* GLOBAL */
+/* ============================= */
+
+body{
+    background: #f7f1e8;
+    font-family: 'Georgia', serif;
+    margin:0;
+    background:  #f7f3ea;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+.main-header{
+    background: rgba(247,241,232,.93);
+    backdrop-filter: blur(12px);
+    color: #1c1410;
+    border-bottom: 2px solid rgba(184,151,90,.18);
+}
+
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+.main-footer{
+    background:#4b2e1e;
+    color:white;
+    text-align:center;
+    padding:12px;
+    margin-top:30px;
+}
+
+/* ============================= */
+/* SECTIONS */
+/* ============================= */
+
+.admin-welcome,
+.zones-section{
+    
+    padding: 30px 35px;
+    margin:20px;
+    border-radius:12px;
+
+   
+}
+
+
+.allzones-card{
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+}
+
+.zone-card{
+    width: 100%;
+    padding: 18px 20px;
+    margin: 14px 0;
+
+    background: white;
+    border: 1px solid rgba(184,151,90,.18);
+    border-radius: 16px;
+
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    transition: all .25s ease;
+}
+
+.zone-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+button{
+    background: linear-gradient(to right, #c69c6d, #a67c52);
+    border:none;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:10px;
+    transition:0.3s;
+}
+
+button:hover{
+    background: linear-gradient(to right, #a67c52, #8b5e34);
+}
+
+/* DISABLED (VERY IMPORTANT) */
+button:disabled,
+select:disabled{
+    background: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow:none;
+}
+
+button:disabled:hover{
+    background:#ccc;
+}
+
+/* ============================= */
+/* DETAILS */
+/* ============================= */
+
+.zone-details{
+    display:none;
+    margin-top:15px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+/* ============================= */
+/* HEADER INSIDE CARD */
+/* ============================= */
+
+.zone-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ============================= */
+/* TAG STYLE */
+/* ============================= */
+
+.zone-tag{
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 14px;
+    border-radius: 100px;
+
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    color: white;
+    letter-spacing: 0.3px;
+}
+
+/* TAG COLORS */
+
+.busy{
+    background:#d9534f;
+}
+
+.normal{
+    background:#d4821a;
+    
+}
+
+.calm{
+    background:#2e8b57;
+    
+}
+
+.no-data{
+    background:#999;
+}
+
+/* ============================= */
+/* SELECT INPUT */
+/* ============================= */
+
+select{
+    padding:7px;
+    border-radius:6px;
+    margin-right:8px;
+    border:1px solid #ddd;
+    transition:0.2s;
+}
+
+select:focus{
+    outline:none;
+    border-color:#c69c6d;
+    box-shadow:0 0 5px rgba(198,156,109,0.5);
+}
+
+/* ============================= */
+/* ACTIONS LAYOUT */
+/* ============================= */
+
+.zone-actions{
+    margin-top:10px;
+}
+
+/* ============================= */
+/* SMALL POLISH */
+/* ============================= */
+h1, h2, h3{
+    color:#4b2e1e;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.5px;
+}
+
+
+p{
+    font-family: 'Georgia', serif;
+    color:#555;
+}
+
+.container{
+   
+    max-width: 1400px;  /* ← makes everything wider */
+    margin: auto;
+    padding: 0 30px;
+}    /* space from edges */
+
+
+.header-content{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    justify-content:flex-start;
+}
+
+.logo{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+}
+.zoneimage-admin{
+   width: 120px;
+    height:120px;
+    object-fit:contain;
+}
+
+.main-header h2{
+    background: linear-gradient(to right, #fff, #f3e0c7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.zone-top{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.zone-text{
+    display: flex;
+    flex-direction: column;
+}
+
+.zone-text h3{
+    margin: 0;
+}
+
+.zone-text button{
+    width: fit-content;
+}
+
+.dashboard-layout{
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* LEFT (Hello Admin) */
+.admin-welcome{
+    background: transparent;
+    padding: 30px 0;
+    width: 20%;
+    min-width: 220px; /* prevents it from getting too tiny */
+}
+
+/* RIGHT (Zones) */
+.zones-section{
+    background: transparent;
+    width: 80%;
+}
+
+.nav-title{
+    font-family:'Georgia', serif;
+    font-size:1.5rem;
+    font-weight:600;
+    color: #503e35;
+;
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom: 1px solid rgba(184,151,90,.18);
+}
+
+.nav-logo{
+    flex-shrink:0;
+}
+
+.nav-title{
+    margin-right:auto; /* pushes everything right */
+}
+
+/* ===== Welcome Card (مثل الصفحة السياحية) ===== 
+.welcome-card{
+    width: 100%;
+    padding: 40px 30px;
+
+    
+    border-right: 1px solid rgba(184,151,90,.18);
+
+    background: linear-gradient(158deg, #efe6d4 0%, #f7f1e8 65%);
+    position: relative;
+    overflow: hidden;
+}*/
+
+/* ✨ الشبكة (نفس السياحية) */
+.welcome-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(rgba(184,151,90,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,151,90,.08) 1px, transparent 1px);
+
+    background-size: 40px 40px;
+    opacity: .5;
+}
+
+/* النص يكون فوق الخلفية */
+.welcome-card h1,
+.welcome-card p{
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== Layout ===== */
+.dashboard-layout{
+    display: flex;
+    align-items: stretch;
+}
+
+.welcome-card{
+     width: calc(100% + 30px);
+    height: 100%; /* مهم */
+
+    padding: 40px 30px;
+
+    border-right: 1px solid rgba(184,151,90,.18);
+
+    background: linear-gradient(158deg, #efe6d4 0%, #f7f1e8 65%);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-welcome{
+    z-index: -1;
+     margin-top: -160px; /* أو جربي -30 حسب شكل الهيدر */
+     margin-left: -70px; /* يطلع لليسار */
+    padding-top: 50px;
+    width: 25%;
+    min-height: calc(100vh - 80px); /* تمتد بس تحت الهيدر */
+     
+}
+
+.dashboard-layout{
+    display: flex;
+    align-items: stretch;
+}
+
+.dashboard-layout{
+    min-height: calc(100vh - 120px);
+}
+
+
+/* النص فوق الخلفية */
+.welcome-content{
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== RIGHT SIDE ===== */
+.right-panel{
+    width: 72%;
+    padding: 40px;
+}
+/* ===== Notification ===== */
+.notification{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    background: #1c1410;
+    color: rgb(0, 0, 0);
+
+    padding: 12px 18px;
+    border-radius: 10px;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+
+    z-index: 9999;
+}
+
+/* show */
+.notification.show{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* أنواع */
+.notification.success{ background: #ffffff; }
+.notification.edit{ background: #ffffff; }
+.notification.delete{ background: #ffffff; }
+
+.notification{
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+}
+
+.exit-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,.88);
+    border: 1px solid var(--border);
+    color: #453831 ;
+
+    border-radius: 999px;
+    padding: 12px 20px;
+
+    font-size: 1rem; /* أكبر شوي */
+    font-weight: 500;
+
+    font-family: 'DM Sans', sans-serif; /* نفس Back */
+    
+    text-decoration: none; /* يشيل الخط */
+    
+    cursor: pointer;
+    transition: .2s ease;
+
+    display: inline-block; /* يخليه نفس شكل الزر */
+}
+
+
+.exit-btn:hover {
+   transform: translateY(-1px);
+      border-color: rgba(184,151,90,.35);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+}
+
+.zone-header p{
+    font-family: 'Georgia', serif;
+    color: #453831 ;
+}
