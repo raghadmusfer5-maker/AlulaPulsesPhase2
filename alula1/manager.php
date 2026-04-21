@@ -365,21 +365,33 @@ function addTag(id, select){
 
     if(select.value === "") return;
 
-    let tag = document.getElementById("tag-" + id);
+    let zoneID = id.replace("zone","");
 
-    tag.innerText = select.value;
-    updateTagStyle(tag, select.value);
-    showNotification("Tag added successfully ✅", "success");
+    fetch("updateZone.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + zoneID + "&tag=" + select.value
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data === "success"){
 
-    // disable add
-    select.disabled = true;
+            let tag = document.getElementById("tag-" + id);
+            tag.innerText = select.value;
+            updateTagStyle(tag, select.value);
 
-    // enable edit + delete
-    document.getElementById("edit-" + id).disabled = false;
-    document.getElementById("delete-" + id).disabled = false;
+            showNotification("Tag added ✅", "success");
 
-    // reset dropdown
-    select.value = "";
+            // disable add
+            select.disabled = true;
+
+            // enable edit + delete
+            document.getElementById("edit-" + id).disabled = false;
+            document.getElementById("delete-" + id).disabled = false;
+        }
+    });
 }
 
 
@@ -387,37 +399,68 @@ function editTag(id, select){
 
     if(select.value === "") return;
 
-    let tag = document.getElementById("tag-" + id);
-showNotification("Tag updated ✏️", "edit");
-    tag.innerText = select.value;
-    updateTagStyle(tag, select.value);
-    
+    let zoneID = id.replace("zone","");
 
-    // reset dropdown
-    select.value = "";
+    fetch("updateZone.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + zoneID + "&tag=" + select.value
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data === "success"){
+
+            let tag = document.getElementById("tag-" + id);
+            tag.innerText = select.value;
+            updateTagStyle(tag, select.value);
+
+            showNotification("Tag updated ✏️", "edit");
+
+            select.value = "";
+        }
+    });
 }
 
 
 function deleteTag(id){
 
-    let tag = document.getElementById("tag-" + id);
+    let zoneID = id.replace("zone","");
 
-    tag.innerText = "No Data";
-    tag.className = "zone-tag no-data";
-showNotification("Tag removed ❌", "delete");
-    // enable add again
-    let add = document.getElementById("add-" + id);
-    add.disabled = false;
-    add.value = "";
+    fetch("updateZone.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + zoneID + "&tag=No Data"
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data === "success"){
 
-    // disable edit
-    let edit = document.getElementById("edit-" + id);
-    edit.disabled = true;
-    edit.value = "";
+            let tag = document.getElementById("tag-" + id);
 
-    // disable delete (THIS IS THE KEY FIX)
-    let del = document.getElementById("delete-" + id);
-    del.disabled = true;
+            tag.innerText = "No Data";
+            tag.className = "zone-tag no-data";
+
+            showNotification("Tag removed ❌", "delete");
+
+            // enable add again
+            let add = document.getElementById("add-" + id);
+            add.disabled = false;
+            add.value = "";
+
+            // disable edit
+            let edit = document.getElementById("edit-" + id);
+            edit.disabled = true;
+            edit.value = "";
+
+            // disable delete
+            let del = document.getElementById("delete-" + id);
+            del.disabled = true;
+        }
+    });
 }
 
 
