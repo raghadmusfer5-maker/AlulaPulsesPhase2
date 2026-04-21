@@ -644,7 +644,7 @@
   return; }
 
       // نجاح التسجيل
-      window.location.href = 'Tourist.html';
+      window.location.href = 'Tourist.php';
     });
   }
 
@@ -686,9 +686,9 @@ e.preventDefault();
 
   // هنا فقط يصير التحويل
   if (selectedRole === 'Manager') {
-    window.location.href = 'manager.html';
+    window.location.href = 'manager.php';
   } else {
-    window.location.href = 'Tourist.html';
+    window.location.href = 'Tourist.php';
   }
 });
   }
