@@ -478,7 +478,7 @@
             <span>Create a new tourist account and continue into the platform.</span>
           </button>
 
-          <button class="flow-choice" onclick="showStep('roleCard')">
+           <button class="flow-choice" onclick="showStep('loginCard')">
             <small>Existing user</small>
             <strong>Log in</strong>
             <span>Continue as a tourist or manager using your existing account.</span>
@@ -514,25 +514,6 @@
         </div>
       </div>
 
-      <div class="flow-card-active" id="roleCard">
-        <div class="stage-box">
-          <h3 class="card-title">Log in</h3>
-          <p class="muted">Choose how you want to continue, then the login form will appear.</p>
-          <div class="role-grid">
-            <button class="role-card" onclick="selectRole('Tourist')">
-              <small>As a user</small>
-              <strong>Tourist</strong>
-            </button>
-            <button class="role-card" onclick="selectRole('Manager')">
-              <small>As an admin</small>
-              <strong>Manager</strong>
-            </button>
-          </div>
-          <div class="form-actions left" style="margin-top:18px;">
-            <button type="button" class="btn" onclick="showStep('welcomeCard')">Cancel</button>
-          </div>
-        </div>
-      </div>
 
       <div class="flow-card-active" id="loginCard">
         <div class="stage-box">
@@ -559,11 +540,11 @@
   </div>
 
   <script>
-    const steps = ['welcomeCard', 'signupCard', 'roleCard', 'loginCard']
+    const steps = ['welcomeCard', 'signupCard', 'loginCard']
     const backFlowBtn = document.getElementById('backFlowBtn')
     const loginTitle = document.getElementById('loginTitle')
     let currentStep = 'welcomeCard'
-    let selectedRole = ''
+    
     document.addEventListener("DOMContentLoaded", () => {
 
   
@@ -675,12 +656,7 @@
         return;
       }
 
-      // send role
-      const roleInput = document.createElement("input");
-      roleInput.type = "hidden";
-      roleInput.name = "role";
-      roleInput.value = selectedRole;
-      loginForm.appendChild(roleInput);
+      
     });
   }
 
@@ -697,21 +673,16 @@
       backFlowBtn.style.display = id === 'welcomeCard' ? 'none' : 'inline-flex'
     }
 
-    function selectRole(role) {
-      selectedRole = role
-      loginTitle.textContent = role === 'Manager' ? 'Manager Log in' : 'Tourist Log in'
-      showStep('loginCard')
-    }
-
+    
 
 
     function goBack() {
-      if (currentStep === 'loginCard') {
-        showStep('roleCard')
-        return
-      }
-      showStep('welcomeCard')
-    }
+  if (currentStep === 'loginCard') {
+    showStep('welcomeCard');
+    return;
+  }
+  showStep('welcomeCard');
+}
   </script>
   <!-- FOOTER -->
 <footer class="main-footer">

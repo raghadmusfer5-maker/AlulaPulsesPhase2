@@ -261,7 +261,7 @@ while($row = $result->fetch_assoc()){
         <!-- ZONES 4 -->
             <div class="zone-card">
     <div class="zone-top">
-        <img src="images\hegra (4).png" alt="Logo" class="zoneimage-admin">
+        <img src="images\hegra (5).png" alt="Logo" class="zoneimage-admin">
 
         <div class="zone-text">
             <h3>Dadan District</h3>
@@ -306,7 +306,7 @@ while($row = $result->fetch_assoc()){
         <div class="zone-card">
 
     <div class="zone-top">
-        <img src="images\hegra (5).png" alt="Logo" class="zoneimage-admin">
+        <img src="images\hegra (4).png" alt="Logo" class="zoneimage-admin">
 
         <div class="zone-text">
             <h3>AlUla Old Town District</h3>
