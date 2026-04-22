@@ -490,20 +490,20 @@
         <div class="stage-box">
           <h3 class="card-title">Create Account</h3>
           <p class="muted">Register as a tourist by entering your username, email, and password.</p>
-          <form id="signupForm" class="stack">
+          <form id="signupForm" class="stack" action="processes/signup.php" method="POST">
   <div>
     <label>Username</label>
-    <input id="signupUsername" class="input" type="text" required />
+    <input id="signupUsername" name="name" class="input" type="text" required />
   </div>
 
   <div>
     <label>Email</label>
-    <input id="signupEmail" class="input" type="email" required />
+    <input id="signupEmail" name="email" class="input" type="email" required />
   </div>
 
   <div>
     <label>Password</label>
-    <input id="signupPassword" class="input" type="password" required />
+    <input id="signupPassword" name="password" class="input" type="password" required />
   </div>
 
   <div class="form-actions">
@@ -537,15 +537,15 @@
       <div class="flow-card-active" id="loginCard">
         <div class="stage-box">
           <h3 class="card-title" id="loginTitle">Please enter your details</h3>
-          <form id="loginForm" class="stack">
+          <form id="loginForm" class="stack" action="processes/login.php" method="POST">
   <div>
     <label>Username</label>
-    <input id="loginUsername" class="input" type="text" required />
+    <input id="loginUsername" name="name" class="input" type="text" required />
   </div>
 
   <div>
     <label>Password</label>
-    <input id="loginPassword" class="input" type="password" required />
+    <input id="loginPassword" name="password" class="input" type="password" required />
   </div>
 
   <div class="form-actions">
@@ -565,6 +565,8 @@
     let currentStep = 'welcomeCard'
     let selectedRole = ''
     document.addEventListener("DOMContentLoaded", () => {
+
+  
 
   function createError(input) {
     const div = document.createElement("div");
@@ -594,20 +596,18 @@
   }
 
   function validateEmail(email) {
-    if (!email.includes("@") || !email.includes(".")) {
-      return "Invalid email";
-    }
+    if (!email.includes("@") || !email.includes(".")) return "Invalid email";
     return null;
   }
 
   function validatePassword(password) {
-  if (password.length < 8) return "Min 8 characters";
-  if (!/[A-Z]/.test(password)) return "Need uppercase";
-  if (!/[a-z]/.test(password)) return "Need lowercase";
-  if (!/[0-9]/.test(password)) return "Need number";
-  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return "Need special character"; 
-  return null;
-}
+    if (password.length < 8) return "Min 8 characters";
+    if (!/[A-Z]/.test(password)) return "Need uppercase";
+    if (!/[a-z]/.test(password)) return "Need lowercase";
+    if (!/[0-9]/.test(password)) return "Need number";
+    if (!/[!@#$%^&*]/.test(password)) return "Need special character";
+    return null;
+  }
 
   // ================= SIGNUP =================
   const signupForm = document.getElementById("signupForm");
@@ -622,37 +622,30 @@
     const passErr = createError(password);
 
     signupForm.addEventListener("submit", (e) => {
-      e.preventDefault(); 
 
       let hasError = false;
 
-      const u = validateUsername(username.value);
-      const em = validateEmail(email.value);
-      const p = validatePassword(password.value);
+      if (validateUsername(username.value)) {
+        showError(username, userErr, "Invalid username"); hasError = true;
+      } else hideError(username, userErr);
 
-      if (u) { showError(username, userErr, u); hasError = true; }
-      else hideError(username, userErr);
+      if (validateEmail(email.value)) {
+        showError(email, emailErr, "Invalid email"); hasError = true;
+      } else hideError(email, emailErr);
 
-      if (em) { showError(email, emailErr, em); hasError = true; }
-      else hideError(email, emailErr);
-
-      if (p) { showError(password, passErr, p); hasError = true; }
-      else hideError(password, passErr);
+      if (validatePassword(password.value)) {
+        showError(password, passErr, "Weak password"); hasError = true;
+      } else hideError(password, passErr);
 
       if (hasError) {
-  e.preventDefault();
-  return; }
-
-      // نجاح التسجيل
-      window.location.href = 'Tourist.php';
+        e.preventDefault();
+      }
     });
   }
 
   // ================= LOGIN =================
   const loginForm = document.getElementById("loginForm");
 
-
-let hasError = false;
   if (loginForm) {
     const username = document.getElementById("loginUsername");
     const password = document.getElementById("loginPassword");
@@ -660,38 +653,38 @@ let hasError = false;
     const userErr = createError(username);
     const passErr = createError(password);
 
-loginForm.addEventListener("submit", (e) => {
-e.preventDefault(); 
-  let hasError = false;
+    loginForm.addEventListener("submit", (e) => {
 
-  const u = validateUsername(username.value);
-  const p = validatePassword(password.value);
+      let hasError = false;
 
-  if (u) { showError(username, userErr, u); hasError = true; }
-  else hideError(username, userErr);
+      if (validateUsername(username.value)) {
+        showError(username, userErr, "Invalid username"); hasError = true;
+      } else hideError(username, userErr);
 
-  if (p) { showError(password, passErr, p); hasError = true; }
-  else hideError(password, passErr);
+      if (validatePassword(password.value)) {
+        showError(password, passErr, "Invalid password"); hasError = true;
+      } else hideError(password, passErr);
 
-  // 🔥 تحقق من اختيار الدور
-  if (!selectedRole) {
-    alert("Please choose Tourist or Manager first");
-    hasError = true;
+      if (!selectedRole) {
+        alert("Choose Tourist or Manager");
+        hasError = true;
+      }
+
+      if (hasError) {
+        e.preventDefault();
+        return;
+      }
+
+      // send role
+      const roleInput = document.createElement("input");
+      roleInput.type = "hidden";
+      roleInput.name = "role";
+      roleInput.value = selectedRole;
+      loginForm.appendChild(roleInput);
+    });
   }
 
-  if (hasError) {
-    e.preventDefault();
-    return;
-  }
-
-  // هنا فقط يصير التحويل
-  if (selectedRole === 'Manager') {
-    window.location.href = 'manager.php';
-  } else {
-    window.location.href = 'Tourist.php';
-  }
-});
-  }
+  
 
 });
 

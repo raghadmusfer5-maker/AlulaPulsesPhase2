@@ -1,3 +1,20 @@
+<?php
+include "processes/db.php";
+
+$result = $conn->query("
+SELECT Zone.ZoneID, Zone.ZoneName, Zone.ZoneDescription, Zone.ZoneImg,
+       Tag.TagStatus, Tag.TagColor
+FROM Zone
+LEFT JOIN Tag ON Zone.ZoneID = Tag.ZoneID
+");
+
+$zones = [];
+
+while($row = $result->fetch_assoc()){
+    $zones[] = $row;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -618,39 +635,43 @@ padding-top: 20px;
     <p>© 2026 AlUla Pulses</p>
 </footer>
 <script>
-const zones = [
-  {
-    name:"Hegra Historical City District", short:"Hegra",
-    lat:26.7960, lng:37.9520, status:"crowded", color:"#c0392b", tag:"Crowded",
-    desc:"Hegra, also known as Madā͐in Ṣāliḥ, is a premier UNESCO World Heritage Site in Saudi Arabia located in AlUla, renowned for its remarkably preserved Nabataean tombs and over 100 monumental graves from the 1st century AD. As the second city of the Nabataean civilization after Petra, it features intricate stone-cut architecture, ancient agricultural systems, and inscriptions within a dramatic desert landscape.",
-    image:"images/hegraPic1.png"
-  },
-  {
-    name:"Nabataean Horizon District", short:"Nabataean Horizon",
-    lat:26.7550, lng:37.9380, status:"clear", color:"#2e8b57", tag:"Clear",
-    desc:"Situated between the ancient sites of Jabal Ikmah and the Hegra Historical City, this district highlights the artistic and architectural legacy of the Nabataean civilization, acting as a curtain-raiser to the main UNESCO site of Hegra. The district focuses on creating an immersive experience showcasing the lifestyle, art, and architecture of the Nabataeans, who settled the area over 2,000 years ago.",
-    image:"images/NabataeanPic1.jpg"
-  },
-  {
-    name:"Jabal Ikmah District", short:"Jabal Ikmah",
-    lat:26.7100, lng:37.9200, status:"moderate", color:"#d4821a", tag:"Moderate",
-    desc:"Jabal Ikmah is one of the most prominent historical sites in AlUla and is designated as one of the largest open-air libraries in the Arabian Peninsula. It includes hundreds of carved inscriptions and stone carvings along the mountain made in different eras and civilizations thousands of years ago.",
-    image:"images/JabalPic1.jpg"
-  },
-  {
-    name:"Dadan District", short:"Dadan",
-    lat:26.6600, lng:37.9350, status:"clear", color:"#2e8b57", tag:"Clear",
-    desc:"Dadan is a premier archaeological site in AlUla. One of the city's most striking features is its rock-cut tombs, carved high into the red sandstone cliffs at about 50 meters above the desert floor — an enduring testament to the craftsmanship and ingenuity of the ancient builders. Numerous inscriptions, statues, and reliefs found in the area further illustrate the cultural, religious, and political life of the period.",
-    image:"images/DadanPic1.jpg"
-  },
-  {
-    name:"AlUla Old Town District", short:"Old Town AlUla",
-    lat:26.6216, lng:37.9218, status:"moderate", color:"#d4821a", tag:"Moderate",
-    desc:"The Old Town of AlUla is more than a historic site — it is a living experience that takes visitors back to the feeling of past centuries. It opens a window into a time-honored way of life, inviting exploration through its alleys that have preserved their spirit despite the passage of time. A destination that inspires, enchants, and connects every visitor to the essence of AlUla.",
-    image:"images/AlulaOldTownPic1.jpg"
-  },
-  
-];
+
+const zones = <?php echo json_encode($zones); ?>;
+
+// manually attach coordinates
+zones[0].lat = 26.7960; zones[0].lng = 37.9520;
+zones[1].lat = 26.7550; zones[1].lng = 37.9380;
+zones[2].lat = 26.7100; zones[2].lng = 37.9200;
+zones[3].lat = 26.6600; zones[3].lng = 37.9350;
+zones[4].lat = 26.6216; zones[4].lng = 37.9218;
+
+
+zones.forEach(z => {
+
+    if (z.TagStatus === "Crowded") {
+        z.color = "#c0392b";
+        z.status = "crowded";
+        z.tag = "Crowded";
+    } 
+    else if (z.TagStatus === "Moderate") {
+        z.color = "#d4821a";
+        z.status = "moderate";
+        z.tag = "Moderate";
+    } 
+    else if (z.TagStatus === "Clear") {
+        z.color = "#2e8b57";
+        z.status = "clear";
+        z.tag = "Clear";
+    } 
+    else {
+        // ❗ THIS IS YOUR REQUIREMENT
+        z.color = "#999";
+        z.status = "unknown";
+        z.tag = "No Data";
+    }
+});
+
+
 const tagColors  = { Crowded:"#c0392b", Moderate:"#d4821a", Clear:"#2e8b57" };
 const statusLabel = { crowded:"🔴 Crowded", moderate:"🟠 Moderate", clear:"🟢 Clear" };
 
@@ -697,8 +718,8 @@ function initFullMap() {
       .addTo(fullMap)
       .bindPopup(`
         <div style="font-family:'DM Sans',sans-serif;padding:4px 2px;min-width:155px">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#1c1410;margin-bottom:3px">${z.name}</div>
-          <div style="font-size:.75rem;color:#6b5540;margin-bottom:7px">${z.short}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#1c1410;margin-bottom:3px">${z.ZoneName}</div>
+          <div style="font-size:.75rem;color:#6b5540;margin-bottom:7px">${z.ZoneDescription}</div>
           <div style="font-size:.76rem;font-weight:500;color:${z.color}">${statusLabel[z.status]}</div>
         </div>`);
   });
@@ -710,7 +731,7 @@ function initFullMap() {
     el.innerHTML = `
       <div class="zr-badge" style="background:${z.color}"></div>
       <div>
-        <div class="zr-name">${z.short}</div>
+        <div class="zr-name">${z.ZoneName}</div>
         <div class="zr-status" style="color:${z.color}">${statusLabel[z.status]}</div>
       </div>`;
     el.onclick = () => fullMap.flyTo([z.lat,z.lng], 14, {duration:1.1});
@@ -740,14 +761,14 @@ function closeMap() {
 
 /* ── Zone Detail Card ── */
 function showZoneDetail(z) {
-  document.getElementById('zd-name').textContent = z.name;
+  document.getElementById('zd-name').textContent = z.ZoneName;
   const tag = document.getElementById('zd-tag');
   tag.textContent = z.tag;
   tag.style.background = tagColors[z.tag] || '#888';
-  document.getElementById('zd-desc').textContent = z.desc;
+  document.getElementById('zd-desc').textContent = z.ZoneDescription;
   const imgWrap = document.getElementById('zd-img-wrap');
-  imgWrap.innerHTML = z.image
-    ? `<img src="${z.image}" alt="${z.name}" onerror="this.parentNode.innerHTML='<div class=zd-no-img>No image available</div>'">`
+  imgWrap.innerHTML = z.ZoneImg
+    ? `<img src="images/${z.ZoneImg}" alt="${z.ZoneName}" onerror="this.parentNode.innerHTML='<div class=zd-no-img>No image available</div>'">`
     : `<div class="zd-no-img">No image available</div>`;
   const detail = document.getElementById('zone-detail');
   detail.classList.add('visible');
@@ -766,16 +787,16 @@ function onSearch(val) {
   const q = val.trim().toLowerCase();
   if (!q) { dd.classList.remove('open'); return; }
   const results = zones.filter(z =>
-    z.name.toLowerCase().includes(q) ||
-    z.short.toLowerCase().includes(q)
+    z.ZoneName.toLowerCase().includes(q) ||
+    z.ZoneDescription.toLowerCase().includes(q)
   );
   dd.innerHTML = results.length
     ? results.map(z => `
-        <div class="search-item" onmousedown="selectZone(${JSON.stringify(z.name).replace(/"/g,'&quot;')})">
+        <div class="search-item" onmousedown="selectZone(${JSON.stringify(z.ZoneName).replace(/"/g,'&quot;')})">
           <div class="search-item-dot" style="background:${z.color}"></div>
           <div>
-            <div class="search-item-name">${z.name}</div>
-            <div class="search-item-sub">${statusLabel[z.status]} · ${z.short}</div>
+            <div class="search-item-name">${z.ZoneName}</div>
+            <div class="search-item-sub">${statusLabel[z.status]} · ${z.ZoneDescription}</div>
           </div>
         </div>`).join('')
     : `<div style="padding:12px 14px;font-size:.8rem;color:var(--text-soft)">No zones found</div>`;
@@ -783,9 +804,9 @@ function onSearch(val) {
 }
 
 function selectZone(name) {
-  const z = zones.find(z => z.name === name);
+  const z = zones.find(z => z.ZoneName === name);
   if (!z) return;
-  document.getElementById('search-input').value = z.name;
+  document.getElementById('search-input').value = z.ZoneName;
   document.getElementById('search-dropdown').classList.remove('open');
   document.getElementById('search-clear').classList.add('visible');
   showZoneDetail(z);

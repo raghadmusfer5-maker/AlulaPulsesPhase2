@@ -1,3 +1,19 @@
+<?php
+include "processes/db.php";
+
+$result = $conn->query("
+SELECT Zone.ZoneID, Tag.TagStatus
+FROM Zone
+LEFT JOIN Tag ON Zone.ZoneID = Tag.ZoneID
+");
+
+$tags = [];
+
+while($row = $result->fetch_assoc()){
+    $tags[$row['ZoneID']] = $row['TagStatus'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -128,7 +144,7 @@
                  100 monumental graves from the 1st century AD. As the second city of the Nabataean civilization 
                  after Petra, it features intricate stone-cut architecture, ancient agricultural systems, and inscriptions 
                  within a dramatic desert landscape.</p>
-            <span id="tag-zone1" class="zone-tag no-data">No Data</span>
+            <span id="tag-zone1" class="zone-tag no-data"><?php echo $tags[1] ?? 'No Data'; ?></span>
         </div>
 
         <div class="zone-actions">
@@ -173,7 +189,7 @@
                  civilization, acting as a curtain-raiser to the main UNESCO site of Hegra. The district 
                  focuses on creating an immersive experience showcasing the lifestyle, art, and architecture of the Nabataeans, 
                  who settled the area over 2,000 years ago.</p>
-            <span id="tag-zone2" class="zone-tag no-data">No Data</span>
+            <span id="tag-zone2" class="zone-tag no-data"><?php echo $tags[2] ?? 'No Data'; ?></span>
         </div>
 
         <div class="zone-actions">
@@ -216,7 +232,7 @@
                 one of the largest open-air libraries in the Arabian Peninsula. It includes hundreds of carved 
                 inscriptions and stone carvings along the mountain made
                  in different eras and civilizations thousands of years ago.</p>
-            <span id="tag-zone3" class="zone-tag no-data">No Data</span>
+            <span id="tag-zone3" class="zone-tag no-data"><?php echo $tags[3] ?? 'No Data'; ?></span>
         </div>
 
         <div class="zone-actions">
@@ -259,7 +275,7 @@
                  carved high into the red sandstone cliffs at about 50 meters above the desert floor — an enduring testament to the 
                  craftsmanship and ingenuity of the ancient builders. Numerous inscriptions, statues, and reliefs found in the area further
                  illustrate the cultural, religious, and political life of the period.</p>
-            <span id="tag-zone4" class="zone-tag no-data">No Data</span>
+            <span id="tag-zone4" class="zone-tag no-data"><?php echo $tags[4] ?? 'No Data'; ?></span>
         </div>
 
         <div class="zone-actions">
@@ -304,7 +320,7 @@
                  past centuries. It opens a window into a time-honored way of life, inviting exploration through its alleys that have preserved
                   their spirit despite the passage of time. A destination that inspires,
                  enchants, and connects every visitor to the essence of AlUla.</p>
-            <span id="tag-zone5" class="zone-tag no-data">No Data</span>
+            <span id="tag-zone5" class="zone-tag no-data"><?php echo $tags[5] ?? 'No Data'; ?></span>
         </div>
 
         <div class="zone-actions">
@@ -367,7 +383,7 @@ function addTag(id, select){
 
     let zoneID = id.replace("zone","");
 
-    fetch("updateZone.php", {
+    fetch("./processes/updateZone.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -379,17 +395,18 @@ function addTag(id, select){
         if(data === "success"){
 
             let tag = document.getElementById("tag-" + id);
+
             tag.innerText = select.value;
             updateTagStyle(tag, select.value);
 
             showNotification("Tag added ✅", "success");
 
-            // disable add
+            // 🔥 CONTROL LOGIC
             select.disabled = true;
-
-            // enable edit + delete
             document.getElementById("edit-" + id).disabled = false;
             document.getElementById("delete-" + id).disabled = false;
+
+            select.value = "";
         }
     });
 }
@@ -401,7 +418,7 @@ function editTag(id, select){
 
     let zoneID = id.replace("zone","");
 
-    fetch("updateZone.php", {
+    fetch("./processes/updateZone.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -413,10 +430,16 @@ function editTag(id, select){
         if(data === "success"){
 
             let tag = document.getElementById("tag-" + id);
+
             tag.innerText = select.value;
             updateTagStyle(tag, select.value);
 
             showNotification("Tag updated ✏️", "edit");
+
+            // 🔥 KEEP STATE CORRECT
+            document.getElementById("add-" + id).disabled = true;
+            document.getElementById("edit-" + id).disabled = false;
+            document.getElementById("delete-" + id).disabled = false;
 
             select.value = "";
         }
@@ -428,7 +451,7 @@ function deleteTag(id){
 
     let zoneID = id.replace("zone","");
 
-    fetch("updateZone.php", {
+    fetch("./processes/updateZone.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -446,19 +469,17 @@ function deleteTag(id){
 
             showNotification("Tag removed ❌", "delete");
 
-            // enable add again
+            // 🔥 RESET CONTROLS
             let add = document.getElementById("add-" + id);
-            add.disabled = false;
-            add.value = "";
-
-            // disable edit
             let edit = document.getElementById("edit-" + id);
-            edit.disabled = true;
-            edit.value = "";
-
-            // disable delete
             let del = document.getElementById("delete-" + id);
+
+            add.disabled = false;
+            edit.disabled = true;
             del.disabled = true;
+
+            add.value = "";
+            edit.value = "";
         }
     });
 }
@@ -491,6 +512,25 @@ function showNotification(message, type){
     }, 2500);
 }
 
+window.onload = function(){
+
+  for(let i = 1; i <= 5; i++){
+
+    let tag = document.getElementById("tag-zone" + i).innerText;
+
+    let add = document.getElementById("add-zone" + i);
+    let edit = document.getElementById("edit-zone" + i);
+    let del = document.getElementById("delete-zone" + i);
+
+    if(tag !== "No Data"){
+        add.disabled = true;
+        edit.disabled = false;
+        del.disabled = false;
+
+        updateTagStyle(document.getElementById("tag-zone" + i), tag);
+    }
+  }
+};
 </script>
 <div id="notification" class="notification"></div>
 </body>

@@ -1,0 +1,28 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "db.php";
+
+$name = $_POST['name'];
+$email = $_POST['email'];
+$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+// 🔍 CHECK IF EMAIL EXISTS FIRST
+$check = $conn->query("SELECT * FROM user WHERE Email='$email'");
+
+if ($check->num_rows > 0) {
+    echo "❌ Email already exists. Try logging in.";
+    exit;
+}
+
+// ✅ INSERT IF NOT EXISTS
+$sql = "INSERT INTO user (Name, Email, Password, UserType)
+VALUES ('$name','$email','$password','tourist')";
+
+if ($conn->query($sql)) {
+    header("Location: ../Tourist.php");
+} else {
+    echo "Error: " . $conn->error;
+}
+?>
