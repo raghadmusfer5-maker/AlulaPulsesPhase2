@@ -449,7 +449,7 @@ padding-top: 20px;
     color: #453831;
 
     border-radius: 999px;
-    padding: 10px 16px; /* أصغر شوي عشان يناسب السيرش */
+    padding: 10px 16px; 
 
     font-size: 0.9rem;
     font-weight: 500;
@@ -521,7 +521,7 @@ padding-top: 20px;
     </div>
 
     <div class="search-dropdown" id="search-dropdown"></div>
-    <a href="index.html" class="exit-btn">Exit</a>
+    <a href="index.php" class="exit-btn">Exit</a>
   </div>
 
 </nav>
@@ -673,7 +673,7 @@ zones.forEach(z => {
 
 
 const tagColors  = { Crowded:"#c0392b", Moderate:"#d4821a", Clear:"#2e8b57" };
-const statusLabel = { crowded:"🔴 Crowded", moderate:"🟠 Moderate", clear:"🟢 Clear" };
+const statusLabel = { crowded:"🔴 Crowded", moderate:"🟠 Moderate", clear:"🟢 Clear", unknown: "No Data" };
 
 const TILE   = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 const ATTR   = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>';
@@ -796,7 +796,7 @@ function onSearch(val) {
           <div class="search-item-dot" style="background:${z.color}"></div>
           <div>
             <div class="search-item-name">${z.ZoneName}</div>
-            <div class="search-item-sub">${statusLabel[z.status]} · ${z.ZoneDescription}</div>
+            <div class="search-item-sub">${statusLabel[z.status]} · ${z.ZoneName}</div>
           </div>
         </div>`).join('')
     : `<div style="padding:12px 14px;font-size:.8rem;color:var(--text-soft)">No zones found</div>`;

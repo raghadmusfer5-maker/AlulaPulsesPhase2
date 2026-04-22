@@ -101,7 +101,7 @@ while($row = $result->fetch_assoc()){
       <p>Heritage-informed urban awareness</p>
     </div>
   </div>
-  <a href="index.html" class="exit-btn">Exit</a>
+  <a href="index.php" class="exit-btn">Exit</a>
 </header>
 
 <div class="container dashboard-layout">
