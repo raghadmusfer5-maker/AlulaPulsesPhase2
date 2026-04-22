@@ -1,6 +1,10 @@
 <?php
 include "processes/db.php";
 
+$crowded = 0;
+$moderate = 0;
+$clear = 0;
+
 $result = $conn->query("
 SELECT Zone.ZoneID, Zone.ZoneName, Zone.ZoneDescription, Zone.ZoneImg,
        Tag.TagStatus, Tag.TagColor
@@ -12,6 +16,11 @@ $zones = [];
 
 while($row = $result->fetch_assoc()){
     $zones[] = $row;
+
+    if ($row['TagStatus'] == 'Crowded') $crowded++;
+    elseif ($row['TagStatus'] == 'Moderate') $moderate++;
+    elseif ($row['TagStatus'] == 'Clear') $clear++;
+    
 }
 ?>
 
@@ -533,9 +542,9 @@ padding-top: 20px;
     <p class="hero-desc">Your window into AlUla's ancient wonders, visitor zones, and crowd intelligence.</p>
     <p class="glance-text">Get a glance of AlUla's latest updates</p>
     <div class="stats-bar">
-      <div class="stat-pill"><div class="stat-dot" style="background:var(--red)"></div>1 Crowded</div>
-      <div class="stat-pill"><div class="stat-dot" style="background:var(--orange)"></div>2 Moderate</div>
-      <div class="stat-pill"><div class="stat-dot" style="background:var(--green)"></div>2 Clear</div>
+      <span class="stat-pill">🔴 <?php echo $crowded; ?> Crowded</span>
+<span class="stat-pill">🟠 <?php echo $moderate; ?> Moderate</span>
+<span class="stat-pill">🟢 <?php echo $clear; ?> Clear</span>
     </div>
   </div>
 
