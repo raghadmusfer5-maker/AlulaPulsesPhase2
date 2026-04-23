@@ -439,6 +439,7 @@
 }
 
 .error-message {
+    color: #8b5e34;
   transition: 0.2s;
 }
   </style>
@@ -527,6 +528,14 @@
   <div>
     <label>Password</label>
     <input id="loginPassword" name="password" class="input" type="password" required />
+    <?php if(isset($_GET['error'])): ?>
+  <div class="error-message" style="color:#8b5e34; font-size:0.8rem; margin-top:4px;">
+    <?php
+      if($_GET['error'] == 'wrong_password') echo "Wrong password";
+      if($_GET['error'] == 'user_not_found') echo "User not found";
+    ?>
+  </div>
+<?php endif; ?>
   </div>
 
   <div class="form-actions">
@@ -552,7 +561,7 @@
   function createError(input) {
     const div = document.createElement("div");
     div.className = "error-message";
-    div.style.color = "#d4a5a5";
+    div.style.color = "#8b5e34";
     div.style.fontSize = "0.8rem";
     div.style.marginTop = "4px";
     div.style.display = "none";
@@ -563,12 +572,12 @@
   function showError(input, errorDiv, msg) {
     errorDiv.textContent = msg;
     errorDiv.style.display = "block";
-    input.style.borderColor = "#d4a5a5";
+    input.style.borderColor = "#8b5e34";
   }
 
   function hideError(input, errorDiv) {
     errorDiv.style.display = "none";
-    input.style.borderColor = "#e8d5c4";
+    input.style.borderColor = "#8b5e34";
   }
 
   function validateUsername(username) {
@@ -654,15 +663,15 @@ if (passError) {
         showError(username, userErr, "Invalid username"); hasError = true;
       } else hideError(username, userErr);
 
-      if (validatePassword(password.value)) {
-        showError(password, passErr, "Invalid password"); hasError = true;
-      } else hideError(password, passErr);
+      if (password.value.length < 1) {
+  showError(password, passErr, "Enter your password");
+  hasError = true;
+} else {
+  hideError(password, passErr);
+}
+      
 
-      if (!selectedRole) {
-        alert("Choose Tourist or Manager");
-        hasError = true;
-      }
-
+      
       if (hasError) {
         e.preventDefault();
         return;
@@ -694,6 +703,13 @@ if (passError) {
     return;
   }
   showStep('welcomeCard');
+}
+
+// OPEN LOGIN PAGE IF ERROR EXISTS
+const urlParams = new URLSearchParams(window.location.search);
+
+if (urlParams.has('error')) {
+  showStep('loginCard');
 }
   </script>
   <!-- FOOTER -->

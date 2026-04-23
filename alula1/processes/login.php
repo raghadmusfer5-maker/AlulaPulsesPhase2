@@ -1,10 +1,6 @@
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+<?php 
 session_start();
 include "db.php";
-
-
 
 $name = $_POST['name'];
 $password = $_POST['password'];
@@ -19,15 +15,18 @@ if ($result->num_rows > 0) {
         $_SESSION['user'] = $user;
 
         if ($user['UserType'] == 'Manager') {
-    header("Location: ../manager.php");
-} else {
-    header("Location: ../Tourist.php");
-}
+            header("Location: ../manager.php");
+        } else {
+            header("Location: ../Tourist.php");
+        }
+
     } else {
-        echo "Wrong password";
+        header("Location: ../index.php?error=wrong_password");
+        exit();
     }
+
 } else {
-    echo "User not found";
+    header("Location: ../index.php?error=user_not_found");
+    exit();
 }
 ?>
-
