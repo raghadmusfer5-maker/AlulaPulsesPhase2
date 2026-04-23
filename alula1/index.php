@@ -582,13 +582,20 @@
   }
 
   function validatePassword(password) {
-    if (password.length < 8) return "Min 8 characters";
-    if (!/[A-Z]/.test(password)) return "Need uppercase";
-    if (!/[a-z]/.test(password)) return "Need lowercase";
-    if (!/[0-9]/.test(password)) return "Need number";
-    if (!/[!@#$%^&*]/.test(password)) return "Need special character";
-    return null;
+  let errors = [];
+
+  if (password.length < 8) errors.push("at least 8 characters");
+  if (!/[A-Z]/.test(password)) errors.push("one uppercase letter");
+  if (!/[a-z]/.test(password)) errors.push("one lowercase letter");
+  if (!/[0-9]/.test(password)) errors.push("one number");
+  if (!/[!@#$%^&*]/.test(password)) errors.push("one special character");
+
+  if (errors.length > 0) {
+    return "Password must contain: " + errors.join(", ");
   }
+
+  return null;
+}
 
   // ================= SIGNUP =================
   const signupForm = document.getElementById("signupForm");
@@ -614,9 +621,14 @@
         showError(email, emailErr, "Invalid email"); hasError = true;
       } else hideError(email, emailErr);
 
-      if (validatePassword(password.value)) {
-        showError(password, passErr, "Weak password"); hasError = true;
-      } else hideError(password, passErr);
+      const passError = validatePassword(password.value);
+
+if (passError) {
+  showError(password, passErr, passError);
+  hasError = true;
+} else {
+  hideError(password, passErr);
+}
 
       if (hasError) {
         e.preventDefault();
