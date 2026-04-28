@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+$emailErr = $_SESSION['emailErr'] ?? "";
+$name = $_SESSION['old_name'] ?? "";
+$email = $_SESSION['old_email'] ?? "";
+
+unset($_SESSION['emailErr']);
+unset($_SESSION['old_name']);
+unset($_SESSION['old_email']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -494,13 +505,21 @@
           <form id="signupForm" class="stack" action="processes/signup.php" method="POST">
   <div>
     <label>Username</label>
-    <input id="signupUsername" name="name" class="input" type="text" required />
+    <input id="signupUsername" name="name" class="input" type="text"
+       value="<?php echo htmlspecialchars($name); ?>" required />
   </div>
 
   <div>
-    <label>Email</label>
-    <input id="signupEmail" name="email" class="input" type="email" required />
-  </div>
+  <label>Email</label>
+  <input id="signupEmail" name="email" class="input" type="email"
+         value="<?php echo htmlspecialchars($email); ?>" required />
+
+  <?php if(!empty($emailErr)): ?>
+    <div class="error-message" style="color:#8b5e34; font-size:0.8rem; margin-top:4px;">
+      <?php echo $emailErr; ?>
+    </div>
+  <?php endif; ?>
+</div>
 
   <div>
     <label>Password</label>
@@ -711,6 +730,9 @@ const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has('error')) {
   showStep('loginCard');
 }
+<?php if(!empty($emailErr)): ?>
+  showStep('signupCard');
+<?php endif; ?>
   </script>
   <!-- FOOTER -->
 <footer class="main-footer">
