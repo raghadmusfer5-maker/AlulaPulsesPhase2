@@ -46,7 +46,7 @@ The goal of this platform is to simplify complex urban data and improve awarenes
 
 1. Download or clone the project  
 2. Open the project folder  
-3. Run the project by opening `logging.html` in your browser  
+3. Run the project by opening `index.php` in your browser  
 
 ---
 
