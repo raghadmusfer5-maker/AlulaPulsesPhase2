@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -12,8 +14,13 @@ $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $check = $conn->query("SELECT * FROM user WHERE Email='$email'");
 
 if ($check->num_rows > 0) {
-    echo "❌ Email already exists. Try logging in.";
-    exit;
+    $_SESSION['emailErr'] = "Email already exists. Try logging in.";
+    $_SESSION['old_email'] = $email;
+    $_SESSION['old_name'] = $name;
+
+    // 🔥 IMPORTANT: go back to your form page
+    header("Location: ../index.php"); // or your signup page
+    exit();
 }
 
 // ✅ INSERT IF NOT EXISTS
@@ -22,6 +29,7 @@ VALUES ('$name','$email','$password','tourist')";
 
 if ($conn->query($sql)) {
     header("Location: ../Tourist.php");
+    exit();
 } else {
     echo "Error: " . $conn->error;
 }
