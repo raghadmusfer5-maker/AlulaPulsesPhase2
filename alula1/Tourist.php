@@ -777,8 +777,9 @@ function showZoneDetail(z) {
   document.getElementById('zd-desc').textContent = z.ZoneDescription;
   const imgWrap = document.getElementById('zd-img-wrap');
   imgWrap.innerHTML = z.ZoneImg
-    ? `<img src="images/${z.ZoneImg}" alt="${z.ZoneName}" onerror="this.parentNode.innerHTML='<div class=zd-no-img>No image available</div>'">`
-    : `<div class="zd-no-img">No image available</div>`;
+  ? `<img src="${z.ZoneImg}" alt="${z.ZoneName}" 
+       onerror="this.parentNode.innerHTML='<div class=zd-no-img>No image available</div>'">`
+  : `<div class="zd-no-img">No image available</div>`;
   const detail = document.getElementById('zone-detail');
   detail.classList.add('visible');
   setTimeout(() => detail.scrollIntoView({ behavior:'smooth', block:'center' }), 60);

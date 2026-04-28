@@ -1,5 +1,3 @@
 <?php
-include "db.php";
-echo "CONNECTED";
+echo password_hash("Admin@123", PASSWORD_DEFAULT);
 ?>
-
