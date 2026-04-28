@@ -38,6 +38,7 @@ The goal of this platform is to simplify complex urban data and improve awarenes
 - HTML
 - CSS
 - JavaScript
+- PHP
 
 ---
 
