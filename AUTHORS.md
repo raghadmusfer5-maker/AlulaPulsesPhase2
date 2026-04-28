@@ -17,7 +17,7 @@
 
 ---
 
-## Raghad Alghatani
+## Raghad Alqahtani
 **Role:**  Developer 
 **Contributions:**
 - Implemented interactive features  
