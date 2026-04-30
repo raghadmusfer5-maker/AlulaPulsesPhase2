@@ -10,14 +10,14 @@ $colors = [
     "Clear" => "#2e8b57"
 ];
 
-// 🔴 DELETE case
+//  DELETE case
 if ($tag == "No Data") {
     $conn->query("DELETE FROM Tag WHERE ZoneID=$zoneID");
     echo "success";
     exit;
 }
 
-// 🔵 ADD or EDIT
+//  ADD or EDIT
 $color = $colors[$tag];
 
 // check if tag exists

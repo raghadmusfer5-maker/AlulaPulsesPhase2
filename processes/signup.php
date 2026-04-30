@@ -10,7 +10,7 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-// 🔍 CHECK IF EMAIL EXISTS FIRST
+// CHECK IF EMAIL EXISTS FIRST
 $check = $conn->query("SELECT * FROM user WHERE Email='$email'");
 
 if ($check->num_rows > 0) {
@@ -23,7 +23,7 @@ if ($check->num_rows > 0) {
     exit();
 }
 
-// ✅ INSERT IF NOT EXISTS
+// INSERT IF NOT EXISTS
 $sql = "INSERT INTO user (Name, Email, Password, UserType)
 VALUES ('$name','$email','$password','tourist')";
 
